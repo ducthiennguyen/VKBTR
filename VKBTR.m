@@ -1,5 +1,6 @@
 function model = VKBTR(Y,mask,rank,K,opt)
 
+gt = Y;
 Y = Y .* mask;
 nObs = sum(mask(:));
 nDim = ndims(Y);
@@ -190,7 +191,8 @@ for epoch = 1:opt.iter1
     end
     
     diff = norm(XNew(:)-XOld(:),'fro')/norm(XOld(:),'fro');
-    fprintf('iter=%d,diff=%f,LB=%f,rank=[%s].\n',epoch,diff,LB(epoch),num2str(rank));
+    nrmse = norm(XNew(:)-gt(:),'fro')/norm(gt(:),'fro');
+    fprintf('iter=%d,diff=%f,LB=%f,NRMSE=%f,rank=[%s].\n',epoch,diff,LB(epoch),nrmse,num2str(rank));
     XOld = XNew;
     % Convergence check
     if diff < opt.tol
